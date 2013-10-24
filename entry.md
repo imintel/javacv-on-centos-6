@@ -56,11 +56,11 @@ You should see a similar stack trace from above. What this error is
 saying is that the required version of libc 2.14 is not found and is
 required for the provided .so files to link.
 
-To fix this we will need to compile our own `javacv-linux-x86_64.jar` and also the opencv libraries
+To fix this we will need to compile our own javacv-linux-x86_64.jar and also the OpenCV libraries
 
 ###Building OpenCV
 
-**Make sure to have JAVA_HOME defined.**
+**Make sure to have JAVA_HOME defined.** Should be something like `/usr/lib/jvm/java`
 
 1. Install some system packages
 	
@@ -82,9 +82,13 @@ To fix this we will need to compile our own `javacv-linux-x86_64.jar` and also t
 			 
 5. Generate make file, make and install
 
+	This step will take some time depending on the machine and what libraries are being built.
+
+
 			 cmake -DBUILD_SHARED_LIBS=ON -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/ ..
 			 make
 			 sudo make install
+			 
 			 
 6. Ensure Library files are there
 			 
@@ -93,13 +97,42 @@ To fix this we will need to compile our own `javacv-linux-x86_64.jar` and also t
 	
 
 ###Building JavaCV
+
 In order to do this we will need [maven](http://maven.apache.org/download.cgi).
 
 1. Clone the JavaCV repository
-   `git clone https://code.google.com/p/javacv/ && cd javacv`
+
+   			git clone https://code.google.com/p/javacv/ && cd javacv
+   			
 2. Checkout the latest release tag, 0.6 at this time.
-   `git checkout 0.6` 
+	
+			git checkout 0.6
+
 3. Build the project
-   `mvn install`
+   
+   			mvn install
 
 In step 3 you should see c++ compiler commands executing picking up on the libraries built in the "Building OpenCV" step.
+
+4. Copy the built jar
+
+			cp target/javacv-linux-x86_64.jar PATH_TO_DEMO_REPOSITORY/
+			
+###Using the jar built from source
+			
+Now run the same test commands from above
+
+```
+javac -cp javacv-linux-x86_64.jar:javacpp.jar:javacv.jar Smoother.java
+java -cp javacv-linux-x86_64.jar:javacpp.jar:javacv.jar Smoother
+```
+
+And you should see the correctly linked libjni file.
+
+```
+/tmp/javacpp14551117426304/libjniopencv_objdetect.so
+```
+
+The provided Smoother.java file simply attempts to load the shared library and print the path.
+To actually get started with JavaCV take a look at their [cookbook](https://code.google.com/p/javacv/wiki/OpenCV2_Cookbook_Examples).
+
