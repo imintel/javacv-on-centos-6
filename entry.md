@@ -112,7 +112,7 @@ In order to do this we will need [maven](http://maven.apache.org/download.cgi).
    
    			mvn install
 
-In step 3 you should see c++ compiler commands executing picking up on the libraries built in the "Building OpenCV" step.
+	In step 3 you should see c++ compiler commands executing picking up on the libraries built in the "Building 	OpenCV" step.
 
 4. Copy the built jar
 
